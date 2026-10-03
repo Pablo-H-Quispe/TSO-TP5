@@ -47,7 +47,7 @@ def abeja(id_abeja):
         if not simulacion_activa:
             sem_tarro_disponible.release()
             break
-            
+
         with mutex:
             tarro_miel += 1
             print(f"🐝 Abeja {id_abeja} añadió miel. Tarro: {tarro_miel}/{M}")
@@ -72,15 +72,16 @@ def oso(max_tarros=2):
         sem_oso.acquire()
         if not simulacion_activa:
             break
-            
+
         with mutex:
             print(f"🐻 [OSO] Se comió los {tarro_miel} frascos de miel. Yumm!")
             tarro_miel = 0
             tarros_comidos += 1
             print(f"🐻 [OSO] Tarros comidos hasta ahora: {tarros_comidos}/{max_tarros}")
-            
+
         sem_tarro_disponible.release()
         time.sleep(0.05)
+        
         
     simulacion_activa = False
 
@@ -89,20 +90,22 @@ if __name__ == "__main__":
     print(" Iniciando Simulación: El Oso y las Abejas (UNJu FI)")
     print("=" * 60)
     # TODO: Crear e iniciar los hilos para el oso y las N abejas
-    hilo_oso = threading.Thread(target=oso, args=(2,), name="Oso")
-    hilo_oso.start()
-    
+    hilos_oso = threading.Thread(target=oso, args=(2,), name="Oso")
+    hilos_oso.start()
+
     hilos_abejas = []
     for i in range(NUM_ABEJAS):
-        t = threading.Thread(target=abeja, args=(i+1,), name=f"Abeja-{i+1}")
-        hilos_abejas.append(t)
-        t.start()
-        
-    hilo_oso.join()
-    sem_tarro_disponible.release()
-    for t in hilos_abejas:
-        t.join()
-        
+        hilo_abeja = threading.Thread(target=abeja, args=(i+1,), name=f"Abeja-{i+1}")
+        hilos_abejas.append(hilo_abeja)
+        hilo_abeja.start()
+
+    # Esperar a que el oso termine
+    hilos_oso.join()
+
+    # Esperar a que todas las abejas terminen
+    for hilo in hilos_abejas:
+        hilo.join()
+
     print("=" * 60)
-    print(" Simulación del Oso y las Abejas finalizada exitosamente.")
+    print(" Simulación Finalizada: El Oso y las Abejas (UNJu FI)")
     print("=" * 60)

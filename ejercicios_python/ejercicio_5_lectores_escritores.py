@@ -63,7 +63,7 @@ def lector(id_lector, iteraciones=2):
         # --- ENTRADA DEL LECTOR ---
         # TODO PARA EL ESTUDIANTE:
         # Completa la sincronización de entrada utilizando 'mutex' y 'sem_write':
-        mutex.acquire()
+        # mutex.acquire()
         readcounter += 1
         if readcounter == 1:
             sem_write.acquire() # El primer lector bloquea a cualquier escritor

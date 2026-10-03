@@ -75,25 +75,26 @@ class BarberiaMonitor:
             # =====================================================================
             self.clientes_esperando += 1
             self.cond_barbero.notify()
-            
+
             while self.silla_barbero_ocupada:
                 self.cond_sala_espera.wait()
-                
+
             self.clientes_esperando -= 1
             self.silla_barbero_ocupada = True
             self.cliente_listo_en_sillon = True
             self.corte_terminado = False
-            
+
             self.cond_barbero.notify()
-            
+
             while not self.corte_terminado:
                 self.cond_corte.wait()
-                
+
             self.silla_barbero_ocupada = False
             self.cliente_listo_en_sillon = False
             self.cond_sala_espera.notify()
             self.cond_barbero.notify()
             return True
+            
 
     def atender_siguiente_cliente(self):
         """
@@ -112,11 +113,12 @@ class BarberiaMonitor:
                 if self.clientes_esperando > 0:
                     self.cond_sala_espera.notify()
                 self.cond_barbero.wait()
-                
+
             if not self.barberia_abierta and not self.cliente_listo_en_sillon:
                 return False
-                
+
             return True
+            
 
     # Alias pedagógico
     esperar_cliente_para_corte = atender_siguiente_cliente

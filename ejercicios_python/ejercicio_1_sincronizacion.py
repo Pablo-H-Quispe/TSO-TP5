@@ -29,19 +29,17 @@ X = 199
 
 # TODO PARA EL ESTUDIANTE:
 # 1. Define los mecanismos de sincronización necesarios:
-sem_A = threading.Semaphore(1)
-sem_B = threading.Semaphore(0)
+sem_orden_AB = threading.Semaphore(0)
 
 def proceso_A():
     global X
-    sem_A.acquire()
     X = X + 1
     print(f"[Parte 1] Proceso A: X = {X}")
-    sem_B.release()
+    sem_orden_AB.release()
 
 def proceso_B():
     global X
-    sem_B.acquire()
+    sem_orden_AB.acquire()
     X = X // 10
     print(f"[Parte 1] Proceso B: X = {X}")
 

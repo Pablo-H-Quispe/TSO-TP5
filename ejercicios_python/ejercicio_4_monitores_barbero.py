@@ -89,10 +89,7 @@ class BarberiaMonitor:
             while not self.corte_terminado:
                 self.cond_corte.wait()
 
-            self.silla_barbero_ocupada = False
-            self.cliente_listo_en_sillon = False
-            self.cond_sala_espera.notify()
-            self.cond_barbero.notify()
+            
             return True
             
 
